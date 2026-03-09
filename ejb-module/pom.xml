@@ -12,7 +12,7 @@
 
     <artifactId>ejb-module</artifactId>
 
-    <packaging>ejb</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
 
@@ -20,7 +20,6 @@
             <groupId>jakarta.ejb</groupId>
             <artifactId>jakarta.ejb-api</artifactId>
             <version>4.0.1</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -28,6 +27,12 @@
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.1.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>6.1.6</version>
         </dependency>
 
     </dependencies>
