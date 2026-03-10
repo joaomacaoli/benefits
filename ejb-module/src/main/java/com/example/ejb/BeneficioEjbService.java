@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class BeneficioEjbService {
@@ -20,7 +21,13 @@ public class BeneficioEjbService {
     }
 
     public Beneficio findById(Long id) {
-        return em.find(Beneficio.class, id);
+        Beneficio beneficio = em.find(Beneficio.class, id);
+
+        if (beneficio == null) {
+            throw new NoSuchElementException("Benefício não encontrado");
+        }
+
+        return beneficio;
     }
 
     public Beneficio create(Beneficio beneficio) {
@@ -29,11 +36,7 @@ public class BeneficioEjbService {
     }
 
     public Beneficio update(Long id, Beneficio data) {
-        Beneficio beneficio = em.find(Beneficio.class, id);
-
-        if (beneficio == null) {
-            throw new IllegalArgumentException("Benefício não encontrado");
-        }
+        Beneficio beneficio = findById(id);
 
         beneficio.setNome(data.getNome());
         beneficio.setDescricao(data.getDescricao());
@@ -44,11 +47,9 @@ public class BeneficioEjbService {
     }
 
     public void delete(Long id) {
-        Beneficio beneficio = em.find(Beneficio.class, id);
+        Beneficio beneficio = findById(id);
 
-        if (beneficio != null) {
-            em.remove(beneficio);
-        }
+        em.remove(beneficio);
     }
 
     public void transfer(Long fromId, Long toId, BigDecimal amount) {
