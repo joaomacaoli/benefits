@@ -99,12 +99,18 @@ Permite transferir saldo entre dois benefícios.
 
 - `POST /api/v1/beneficios/transfer`
 
-Parâmetros:
+Body:
+
+```json
+{
+  "fromId": 1,
+  "toId": 2,
+  "amount": 100
+}
+```
+
+Campos:
 
 - fromId: ID do benefício de origem
 - toId: ID do benefício de destino
-- amount: valor da transferência
-
-Exemplo:
-
-- `POST /api/v1/beneficios/transfer?fromId=1&toId=2&amount=100`
+- amount: valor da transferência (deve ser maior que zero)

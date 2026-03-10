@@ -1,15 +1,14 @@
 package com.example.backend.controllers;
 
 import com.example.backend.dtos.BeneficioRequestDTO;
+import com.example.backend.dtos.TransferRequestDTO;
 import com.example.backend.services.BeneficioService;
 import com.example.ejb.Beneficio;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -55,16 +54,7 @@ public class BeneficioController {
 
     @Operation(summary = "Realiza transferência de saldo entre dois benefícios")
     @PostMapping("/transfer")
-    public void transfer(
-            @Parameter(description = "ID do benefício de origem")
-            @RequestParam Long fromId,
-
-            @Parameter(description = "ID do benefício de destino")
-            @RequestParam Long toId,
-
-            @Parameter(description = "Valor a ser transferido")
-            @RequestParam BigDecimal amount
-    ) {
-        service.transfer(fromId, toId, amount);
+    public void transfer(@Valid @RequestBody TransferRequestDTO dto) {
+        service.transfer(dto.getFromId(), dto.getToId(), dto.getAmount());
     }
 }

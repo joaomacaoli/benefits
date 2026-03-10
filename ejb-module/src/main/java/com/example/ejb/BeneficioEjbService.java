@@ -1,6 +1,7 @@
 package com.example.ejb;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 
@@ -51,16 +52,27 @@ public class BeneficioEjbService {
     }
 
     public void transfer(Long fromId, Long toId, BigDecimal amount) {
+        if (fromId == null || toId == null) {
+            throw new IllegalArgumentException("Os benefícios de origem e destino são obrigatórios");
+        }
+
+        if (fromId.equals(toId)) {
+            throw new IllegalArgumentException("O benefício de origem e destino não podem ser iguais");
+        }
+
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("O valor deve ser maior que zero");
         }
 
-        Beneficio from = em.find(Beneficio.class, fromId);
-        Beneficio to = em.find(Beneficio.class, toId);
+        Beneficio from = em.find(Beneficio.class, fromId, LockModeType.PESSIMISTIC_WRITE);
+        Beneficio to = em.find(Beneficio.class, toId, LockModeType.PESSIMISTIC_WRITE);
 
-        // BUG: sem validações, sem locking, pode gerar saldo negativo e lost update
-        if (from == null || to == null) {
-            throw new IllegalArgumentException("Benefício não encontrado");
+        if (from == null) {
+            throw new IllegalArgumentException("Benefício de origem não encontrado");
+        }
+
+        if (to == null) {
+            throw new IllegalArgumentException("Benefício de destino não encontrado");
         }
 
         if (from.getValor().compareTo(amount) < 0) {
@@ -69,8 +81,5 @@ public class BeneficioEjbService {
 
         from.setValor(from.getValor().subtract(amount));
         to.setValor(to.getValor().add(amount));
-
-        em.merge(from);
-        em.merge(to);
     }
 }

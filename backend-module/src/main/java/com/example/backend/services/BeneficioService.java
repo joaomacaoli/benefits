@@ -57,6 +57,10 @@ public class BeneficioService {
 
     @Transactional
     public void transfer(Long fromId, Long toId, BigDecimal amount) {
+        if (fromId.equals(toId)) {
+            throw new IllegalArgumentException("O benefício de origem e destino não podem ser iguais");
+        }
+
         ejbService.transfer(fromId, toId, amount);
     }
 }
