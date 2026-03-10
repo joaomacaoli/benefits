@@ -1,10 +1,12 @@
 package com.example.backend.controllers;
 
+import com.example.backend.dtos.BeneficioRequestDTO;
 import com.example.backend.services.BeneficioService;
 import com.example.ejb.Beneficio;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -35,14 +37,14 @@ public class BeneficioController {
 
     @Operation(summary = "Criar benefício")
     @PostMapping
-    public Beneficio create(@RequestBody Beneficio beneficio) {
-        return service.create(beneficio);
+    public Beneficio create(@Valid @RequestBody BeneficioRequestDTO beneficioDTO) {
+        return service.create(beneficioDTO);
     }
 
     @Operation(summary = "Atualizar benefício")
     @PutMapping("/{id}")
-    public Beneficio update(@PathVariable Long id, @RequestBody Beneficio beneficio) {
-        return service.update(id, beneficio);
+    public Beneficio update(@PathVariable Long id, @Valid @RequestBody BeneficioRequestDTO beneficioDTO) {
+        return service.update(id, beneficioDTO);
     }
 
     @Operation(summary = "Remover benefício")

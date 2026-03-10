@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.dtos.BeneficioRequestDTO;
 import com.example.ejb.Beneficio;
 import com.example.ejb.BeneficioEjbService;
 import jakarta.transaction.Transactional;
@@ -25,14 +26,28 @@ public class BeneficioService {
         return ejbService.findById(id);
     }
 
-    @Transactional
-    public Beneficio create(Beneficio beneficio) {
-        return ejbService.create(beneficio);
-    }
+        @Transactional
+        public Beneficio create(BeneficioRequestDTO dto) {
+            Beneficio b = new Beneficio();
+
+            b.setNome(dto.getNome());
+            b.setDescricao(dto.getDescricao());
+            b.setValor(dto.getValor());
+            b.setAtivo(dto.getAtivo());
+
+            return ejbService.create(b);
+        }
 
     @Transactional
-    public Beneficio update(Long id, Beneficio beneficio) {
-        return ejbService.update(id, beneficio);
+    public Beneficio update(Long id, BeneficioRequestDTO dto) {
+        Beneficio b = new Beneficio();
+
+        b.setNome(dto.getNome());
+        b.setDescricao(dto.getDescricao());
+        b.setValor(dto.getValor());
+        b.setAtivo(dto.getAtivo());
+
+        return ejbService.update(id, b);
     }
 
     @Transactional
